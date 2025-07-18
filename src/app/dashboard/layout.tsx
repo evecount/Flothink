@@ -8,7 +8,7 @@ import { useAuth } from '@/hooks/use-auth';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db, auth } from '@/lib/firebase';
 import { signOut } from 'firebase/auth';
-import { Loader2, LogOut, Folder, LayoutDashboard, History, Beaker, Play, Flame } from 'lucide-react';
+import { Loader2, LogOut, Folder, LayoutDashboard, History, Play } from 'lucide-react';
 import {
   SidebarProvider,
   Sidebar,
@@ -61,6 +61,7 @@ export default function DashboardLayout({
       });
       return () => unsubscribe();
     } else if (!user) {
+      // If user is null, don't keep loading forever
       setProjectsLoading(false);
     }
   }, [user]);
@@ -111,22 +112,6 @@ export default function DashboardLayout({
                 <Link href="/dashboard/completed">
                   <History />
                   <span>History</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-             <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/dashboard/test-creation'}>
-                <Link href="/dashboard/test-creation">
-                  <Beaker />
-                  <span>Test Creation</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild isActive={pathname === '/dashboard/test-firestore'}>
-                <Link href="/dashboard/test-firestore">
-                  <Flame />
-                  <span>Firestore Test</span>
                 </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
