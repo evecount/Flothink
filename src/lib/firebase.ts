@@ -28,7 +28,6 @@ let storage: Storage | null = null;
 // This is the primary configuration for the Flothink app.
 // It is safe to delete any other web app registrations from the Firebase console.
 if (firebaseConfig.apiKey && firebaseConfig.projectId) {
-  console.log(`[Firebase] Initializing with projectId: ${firebaseConfig.projectId}. If sign-in fails, ensure this project ID matches the one in your Firebase console where you've enabled auth providers.`);
   try {
     if (getApps().length === 0) {
       app = initializeApp(firebaseConfig);
@@ -52,7 +51,8 @@ if (firebaseConfig.apiKey && firebaseConfig.projectId) {
       console.error("Failed to initialize Firebase", e);
   }
 } else {
-    console.warn("Firebase configuration is missing. Please create or check your .env file with your project's credentials to connect to Firebase.");
+    // This warning is for local development. In production, these will be set via apphosting.yaml.
+    console.warn("Firebase configuration environment variables are missing. This is expected during local development if you have not set up a .env file.");
 }
 
 
