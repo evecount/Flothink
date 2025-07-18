@@ -60,11 +60,10 @@ export default function DashboardLayout({
         setProjectsLoading(false);
       });
       return () => unsubscribe();
-    } else if (!user) {
-      // If user is null, don't keep loading forever
+    } else if (!user && !loading) {
       setProjectsLoading(false);
     }
-  }, [user]);
+  }, [user, loading]);
 
   if (loading || !user) {
     return (
