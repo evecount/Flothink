@@ -49,7 +49,7 @@ export default function LandingPage() {
           </div>
           <div className="relative">
              <Image
-                src="https://placehold.co/600x400.png"
+                src="https://github.com/elaraNkairos/Flothink/blob/main/public/flothink-front-page.png"
                 alt="Flothink app dashboard screenshot"
                 width={600}
                 height={400}
