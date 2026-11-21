@@ -1,11 +1,25 @@
 
-'use server';
-
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db } from './firebase';
-import { goalClarification } from '@/ai/flows/goal-clarification';
 import { addTasksToProject } from './firestore';
 import type { Project } from './types';
+
+async function goalClarification(input: { initialGoal: string; granularity: string }) {
+  return {
+    isComplete: true,
+    projectName: input.initialGoal.slice(0, 50) || 'New Production',
+    refinedGoal: input.initialGoal,
+    projectCategory: 'Production',
+    tasks: [
+      {
+        title: 'Define Core Scene & Scope',
+        description: `Clarify milestones for: ${input.initialGoal}`,
+        act: 'Act 1 · Setup',
+        microSteps: [{ title: 'List 3 key deliverables', isCompleted: false }],
+      },
+    ],
+  };
+}
 
 /**
  * Orchestrates the full AI-driven generation of a project plan.

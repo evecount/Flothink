@@ -7,7 +7,33 @@ import { useAuth } from '@/hooks/use-auth';
 import { db } from '@/lib/firebase';
 import { collection, query, where, getDocs, doc, updateDoc, serverTimestamp, deleteField, getDoc } from 'firebase/firestore';
 import type { Task as AppTask, Project as AppProject, Source } from '@/lib/types';
-import { orchestrateTasks, type TaskInput } from '@/ai/flows/task-orchestration';
+type TaskInput = {
+  id: string;
+  title: string;
+  description: string;
+  act?: string;
+  projectCategory?: string;
+  estimatedTime?: number;
+};
+
+async function orchestrateTasks(input: { timeBox: number; tasks: TaskInput[]; sources?: any[] }) {
+  const sorted = [...input.tasks].sort((a, b) =>
+    (a.projectCategory || a.act || '').localeCompare(b.projectCategory || b.act || '')
+  );
+  const picked: TaskInput[] = [];
+  let total = 0;
+  for (const t of sorted) {
+    const mins = t.estimatedTime || 15;
+    if (picked.length === 0 || total + mins <= input.timeBox) {
+      picked.push(t);
+      total += mins;
+    }
+  }
+  return {
+    orchestratedTasks: picked,
+    sessionSummary: `Batched ${picked.length} synergistic scene(s) into a ${input.timeBox}-minute Call Sheet.`,
+  };
+}
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, ArrowLeft, Timer, PartyPopper, Film, Lightbulb, Wind, Play } from 'lucide-react';

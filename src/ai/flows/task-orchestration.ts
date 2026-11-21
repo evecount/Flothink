@@ -1,5 +1,4 @@
 
-'use server';
 
 /**
  * @fileOverview Orchestrates tasks by grouping similar tasks and prioritizing unblocked tasks.

@@ -1,5 +1,4 @@
 
-'use server';
 
 /**
  * @fileOverview A tool for fetching the text content of a URL.
