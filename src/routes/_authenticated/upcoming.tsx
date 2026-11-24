@@ -52,7 +52,7 @@ function Upcoming() {
         </div>
       </section>
 
-      <section className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-x-3 gap-y-6 px-4 sm:px-6 pt-8">
+      <section className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-6 px-4 sm:px-6 pt-8">
         {shown.map((t, i) => (
           <Link key={t.id} to="/projects/$id" params={{ id: t.project_id }}>
             <TaskCard tag={fmt(t.due_date!)} title={t.title} meta={`${t.projects?.name ?? ""} · ${t.task_type}`} hot={i % 3 === 0} />

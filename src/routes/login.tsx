@@ -69,7 +69,7 @@ function Login() {
 
   return (
     <Screen>
-      <div className="relative z-10 flex flex-1 flex-col justify-center gap-6 px-8 py-10">
+      <div className="relative z-10 mx-auto flex w-full max-w-md flex-1 flex-col justify-center gap-6 px-8 py-10">
         <div className="mx-auto">
           <img src={logo.url} alt="Flothink" className="w-full max-w-64" />
         </div>

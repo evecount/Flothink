@@ -22,7 +22,7 @@ function Projects() {
           <button key={t} onClick={() => setTab(t)} className={tab === t ? "btn-ember !py-2" : "btn-ghost"}>{t}</button>
         ))}
       </div>
-      <section className="grid grid-cols-1 min-[360px]:grid-cols-2 gap-x-3 gap-y-6 px-4 sm:px-6 pt-6">
+      <section className="grid grid-cols-1 min-[360px]:grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-6 px-4 sm:px-6 pt-6">
         {list.map((p, i) => {
           const pt = tasks.filter((t) => t.project_id === p.id);
           const done = pt.filter((t) => t.stage === "Done").length;
