@@ -1,7 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, FolderKanban, Plus, Search, Timer } from "lucide-react";
-import type { ReactNode } from "react";
-import { useFlothinkTheme, type FlothinkTheme } from "@/lib/theme";
+import { CalendarDays, FolderKanban, ImagePlus, Plus, Search, Timer } from "lucide-react";
+import { useRef, type ChangeEvent, type ReactNode } from "react";
+import { toast } from "sonner";
+import { buildCustomSkinFromFile, useFlothinkTheme, type FlothinkTheme } from "@/lib/theme";
 
 const nav = [
   { to: "/upcoming", label: "Upcoming", icon: CalendarDays },
@@ -17,10 +18,29 @@ const themes: { id: FlothinkTheme; label: string }[] = [
 ];
 
 export function Screen({ children }: { children: ReactNode }) {
-  const { theme, setTheme } = useFlothinkTheme();
+  const { theme, customSkin, setTheme, applyCustomSkin } = useFlothinkTheme();
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  async function onPickBackground(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    try {
+      const skin = await buildCustomSkinFromFile(file);
+      applyCustomSkin(skin);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not load background.");
+    }
+  }
+
+  const hasCustom = theme === "custom" && Boolean(customSkin?.imageDataUrl);
+
   return (
     <div className="min-h-screen bg-ink-deep flex justify-center">
-      <main className="bg-ember-gradient grain relative w-full max-w-md min-h-screen flex flex-col font-sans text-paper overflow-hidden">
+      <main
+        className={`${hasCustom ? "" : "bg-ember-gradient "}grain relative w-full max-w-md min-h-screen flex flex-col font-sans text-paper overflow-hidden bg-cover bg-center`}
+        style={hasCustom ? { backgroundImage: `linear-gradient(to bottom, rgb(0 0 0 / 0.45), rgb(0 0 0 / 0.65)), url(${customSkin!.imageDataUrl})` } : undefined}
+      >
         {theme === "slate" && (
           <img
             src="/flothink-speckle.png"
@@ -30,7 +50,8 @@ export function Screen({ children }: { children: ReactNode }) {
           />
         )}
         <div className="relative z-20 flex justify-end px-4 pt-3">
-          <div className="inline-flex rounded-full border border-paper/25 bg-ink-deep/40 p-0.5 backdrop-blur-sm text-[11px] font-medium">
+          <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={onPickBackground} />
+          <div className="inline-flex items-center rounded-full border border-paper/25 bg-ink-deep/40 p-0.5 backdrop-blur-sm text-[11px] font-medium">
             {themes.map((t) => (
               <button
                 key={t.id}
@@ -43,6 +64,20 @@ export function Screen({ children }: { children: ReactNode }) {
                 {t.label}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                if (customSkin && theme !== "custom") setTheme("custom");
+                else fileRef.current?.click();
+              }}
+              title={theme === "custom" ? "Change custom background" : "Upload your own background"}
+              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 transition-colors ${
+                theme === "custom" ? "bg-paper text-ink-deep" : "text-paper/75 hover:text-paper"
+              }`}
+            >
+              <ImagePlus className="size-3" />
+              {theme === "custom" ? "Your set" : "Custom"}
+            </button>
           </div>
         </div>
         {children}
