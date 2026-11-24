@@ -121,6 +121,15 @@
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
+:root[data-theme="slate"] {
+  --ember: oklch(0.99 0 0);
+  --ember-soft: oklch(0.91 0 0);
+  --ink: oklch(0.18 0.004 80);
+  --paper: oklch(0.99 0 0);
+  --ink-deep: oklch(0.18 0.004 80);
+  --gradient-ember: radial-gradient(90% 60% at 85% 20%, oklch(0.24 0.004 80) 0%, oklch(0.18 0.004 80) 60%, oklch(0.14 0.004 80) 100%);
+}
+
 .dark {
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
