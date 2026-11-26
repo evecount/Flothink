@@ -1,5 +1,4 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -17,14 +16,13 @@ const ideas = ["Launch a newsletter about urban gardening", "Ship an MVP of a ha
 function NewProject() {
   const [goal, setGoal] = useState("");
   const [busy, setBusy] = useState(false);
-  const gen = useServerFn(generatePlan);
   const qc = useQueryClient();
   const navigate = useNavigate();
 
   async function go() {
     setBusy(true);
     try {
-      const { projectId } = await gen({ data: { goal } });
+      const { projectId } = await generatePlan({ goal });
       await qc.invalidateQueries();
       toast.success("Your plan is ready.");
       navigate({ to: "/projects/$id", params: { id: projectId } });

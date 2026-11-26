@@ -46,7 +46,10 @@ export type Database = {
       }
       tasks: {
         Row: {
+          action_channel: string
+          context_hook: string
           created_at: string
+          draft_seed: string | null
           due_date: string | null
           ease_score: number
           id: string
@@ -59,7 +62,10 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          action_channel?: string
+          context_hook?: string
           created_at?: string
+          draft_seed?: string | null
           due_date?: string | null
           ease_score?: number
           id?: string
@@ -72,7 +78,10 @@ export type Database = {
           user_id?: string
         }
         Update: {
+          action_channel?: string
+          context_hook?: string
           created_at?: string
+          draft_seed?: string | null
           due_date?: string | null
           ease_score?: number
           id?: string
