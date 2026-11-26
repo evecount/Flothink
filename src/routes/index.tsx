@@ -2,7 +2,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { createDemoAccount } from "@/lib/demo.functions";
 import { toast } from "sonner";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { Screen, TaskCard } from "@/components/AppShell";
 import logo from "@/assets/flothink-wordmark.png.asset.json";
@@ -24,9 +24,25 @@ export const Route = createFileRoute("/")({
 function Home() {
   const { session } = useAuth();
   const navigate = useNavigate();
+  const [refSource, setRefSource] = useState<string>("");
+
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search).get("ref")?.trim();
+    if (param) {
+      window.localStorage.setItem("flothink-ref", param);
+      setRefSource(param);
+    } else {
+      setRefSource(window.localStorage.getItem("flothink-ref") ?? "");
+    }
+  }, []);
+
   useEffect(() => {
     if (session) navigate({ to: "/upcoming" });
   }, [session, navigate]);
+
+  const feedbackSubject = encodeURIComponent(
+    refSource ? `Flothink feedback (via ${refSource})` : "Flothink feedback",
+  );
   return (
     <Screen>
       <div className="mx-auto w-full max-w-5xl px-5 sm:px-8">
@@ -69,6 +85,24 @@ function Home() {
             <Link to="/login" className="btn-google flex-1">Sign up free</Link>
           </div>
         </section>
+
+        <footer className="relative z-10 border-t border-paper/20 py-8 text-center text-xs text-paper/80 flex flex-col gap-2">
+          <p>
+            Built in the open —{" "}
+            <a
+              href={`mailto:gwen@evecount.com?subject=${feedbackSubject}`}
+              className="underline hover:text-paper font-medium"
+            >
+              What should we build next?
+            </a>
+          </p>
+          <p className="opacity-75">
+            An Eve Count property ·{" "}
+            <a href={`mailto:gwen@evecount.com?subject=${feedbackSubject}`} className="hover:underline">
+              gwen@evecount.com
+            </a>
+          </p>
+        </footer>
       </div>
     </Screen>
   );
